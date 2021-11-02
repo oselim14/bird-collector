@@ -2,6 +2,7 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    font-family: 'Zen Kurenaido', sans-serif !important;
 }
   
 main {
@@ -14,7 +15,23 @@ footer.page-footer {
 }
 
 .nav-wrapper, .page-footer{
-    background-color: #2e7d32
+    background-color: #558037;
+    color: #ffe6a7;
 }
 
-  
+nav ul {
+    color: #ffe6a7; 
+}
+
+.brand-logo{
+    text-align: center;
+    max-height: 3vmin;
+    color: #ffe6a7;
+}
+img{
+    max-height: 6vmin;
+}
+
+.card {
+    border-radius: 12px !important;
+}

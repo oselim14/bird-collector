@@ -1,30 +1,35 @@
-from django import http
 from django.shortcuts import render
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .models import Bird
 
 # Create your views here.
 from django.http import HttpResponse
 
-
-class Bird():
-    def __init__(self, name, species, description, seen_where):
-        self.name = name,
-        self.species = species,
-        self.description = description,
-        self.seen_where = seen_where
-
-birds = [
-    Bird('Bird 1', 'Robin', 'friendly', 'backyard'),
-    Bird('Bird 2', 'Blue Jay', 'friendly', 'front yard'),
-    Bird('Bird 3', 'Woodpecker', 'not friendly', 'tree in back yard'),
-]
+from main_app import models
 
 
 def home(request):
-    return HttpResponse('<h1>Hello smol birbs</h1>')
+    return render(request, 'home.html')
 
 def about(request):
     return render(request, 'about.html')
 
 def birds_index(request):
+    birds = Bird.objects.all()
     return render(request, 'birds/index.html', {'birds': birds})
-    
+
+def birds_detail(request, bird_id):
+    bird = Bird.objects.get(id=bird_id)
+    return render(request, 'birds/detail.html', {'bird': bird})
+
+class BirdCreate(CreateView):
+    model = Bird
+    fields = '__all__'
+
+class BirdUpdate(UpdateView):
+    model = Bird
+    fields = ['species', 'description', 'seen_where']
+
+class BirdDelete(DeleteView):
+    model = Bird
+    success_url = '/birds/'

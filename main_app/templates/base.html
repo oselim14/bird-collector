@@ -8,7 +8,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Bird Collector</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
   <header class="navbar-fixed">
@@ -18,8 +19,9 @@
           <li><a href="/" class="left brand-logo">&nbsp;&nbsp;BirdCollector</a></li>
         </ul>
         <ul class="right">
-          <li><a href="/about">About</a></li>
-          <li><a href="/birds">View All My Birds</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+          <li><a href="{% url 'birds_create' %}">Add a New Bird</a></li>
+          <li><a href="{% url 'index' %}">View All My Birds</a></li>
         </ul>
       </div>
     </nav>
