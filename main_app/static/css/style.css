@@ -35,3 +35,7 @@ img{
 .card {
     border-radius: 12px !important;
 }
+
+nav > a {
+    color: #ffe6a7 !important;
+}
