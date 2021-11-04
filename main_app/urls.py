@@ -12,6 +12,7 @@ urlpatterns = [
     path('birds/<int:bird_id>/add_sighting/', views.add_sighting, name='add_sighting'),
     path('birds/<int:bird_id>/assoc_location/<int:location_id>/', views.assoc_location, name='assoc_location'),
     path('birds/<int:bird_id>/unassoc_location/<int:location_id>/', views.unassoc_location, name='unassoc_location'),
+    path('birds/<int:bird_id>/add_photo/', views.add_photo, name='add_photo'),
     path('locations/', views.LocationList.as_view(), name='locations_index'),
     path('locations/<int:pk>/', views.LocationDetail.as_view(), name='locations_detail'),
     path('locations/create/', views.LocationCreate.as_view(), name='locations_create'),

@@ -1,8 +1,11 @@
 from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Bird, Location
+from .models import Bird, Location, Photo
 from .forms import SightingForm
+import uuid
+import boto3
+import os
 
 # Create your views here.
 from django.http import HttpResponse
@@ -74,4 +77,18 @@ def assoc_location(request, bird_id, location_id):
 
 def unassoc_location(request, bird_id, location_id):
     Bird.objects.get(id=bird_id).locations.remove(location_id)
+    return redirect('detail', bird_id=bird_id)
+
+def add_photo(request, bird_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            bucket = os.environ['S3_BUCKET']
+            s3.upload_fileobj(photo_file, bucket, key)
+            url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
+            Photo.objects.create(url=url, bird_id=bird_id)
+        except:
+            print('An error occurred uploading file to S3')
     return redirect('detail', bird_id=bird_id)
