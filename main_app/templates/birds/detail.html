@@ -3,17 +3,103 @@
 
 <h1>Bird Details</h1>
 
-<div class="card">
-  <div class="card-content">
-    <span class="card-title">{{ bird.name }}</span>
-    <p>Species: {{ bird.species }}</p>
-    <p>Description: {{ bird.description }}</p>
-    <p>Seen: {{ bird.seen_where }}</p>
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ bird.name }}</span>
+        <p>Species: {{ bird.species }}</p>
+        <p>Description: {{ bird.description }}</p>
+        <p>Seen: {{ bird.seen_where }}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'birds_update' bird.id %}">Edit</a>
+        <a href="{% url 'birds_delete' bird.id %}">Delete</a>
+      </div>
+    </div>
   </div>
-  <div class="card-action">
-    <a href="{% url 'birds_update' bird.id %}">Edit</a>
-    <a href="{% url 'birds_delete' bird.id %}">Delete</a>
+  <div class="col s6">
+    <form action="{% url 'add_sighting' bird.id %}" method="post">
+      {% csrf_token %}
+      {{ sighting_form.as_p }}
+      <input type="submit" class="btn" value="Add Sighting">
+    </form>
+    <table class="striped">
+      <thead>
+        <tr><th>Date</th><th>Sighting</th></tr>
+      </thead>
+      <tbody>
+        {% for sighting in bird.sighting_set.all %}
+          <tr>
+            <td>{{sighting.date}}</td>
+            <td>{{sighting.get_time_display}}</td>
+          </tr>
+        {% endfor %}  
+      </tbody>
+    </table>
   </div>
+</div>  
+<hr>
+<div class = "row">
+  <div class="col s6">
+    <h3>{{ bird.name }}'s Sightings</h3>
+    {% if bird.locations.count %}
+      {% for location in bird.locations.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              A <span>{{ location.name }}</span> {{ location.where }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'unassoc_location' bird.id location.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn">Remove</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>{{bird.name}} Hasn't Been Seen</h5>
+    {% endif %}
+  </div>
+  <!-- Available locations will come after this line -->
+  <div class="col s6">
+    <h3>Available Locations</h3>
+    {% if locations.count %}
+      {% for location in locations.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              <span>{{ location.name }}</span> {{ location.where }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'assoc_location' bird.id location.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn">Add</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5 class="center">{{bird.name}} has been seen in all the usual places!</h5>
+    {% endif %}
+  </div>
+
 </div>
+
+<script>
+  const dateEl = document.getElementById('id_date');
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+
+  const selectEl = document.getElementById('id_time');
+  M.FormSelect.init(selectEl);
+</script>
 
 {% endblock %}
