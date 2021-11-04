@@ -128,3 +128,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import environ
 environ.Env()
 environ.Env.read_env()
+
+LOGIN_REDIRECT_URL = '/birds/'
+LOGOUT_REDIRECT_URL = '/'

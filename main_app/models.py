@@ -1,6 +1,7 @@
 from django.urls import reverse
 from django.db import models
 from datetime import date
+from django.contrib.auth.models import User
 
 TIMES = (
     ('AM', 'Morning'),
@@ -24,6 +25,7 @@ class Bird(models.Model):
     description = models.TextField(max_length=250)
     seen_where = models.TextField(max_length=100)
     locations = models.ManyToManyField(Location)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
